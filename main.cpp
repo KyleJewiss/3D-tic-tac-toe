@@ -120,82 +120,140 @@ array<int, BOARD_SIZE> get_move(vector<vector<vector<char>>> &board, array<int, 
     }
 }
 
-bool check_win(vector<vector<vector<char>>> &board, char &player_character)
+bool check_verticals(vector<vector<vector<char>>> &board, char &player_character)
 {
     for (int i = 0; i < BOARD_SIZE; i++)
     {
-        // Check rows
-        if (board[i][0][0] == player_character && board[i][1][0] == player_character && board[i][2][0] == player_character)
+        for (int j = 0; j < BOARD_SIZE; j++)
         {
-            return true;
+            bool win = true;
+            for (int k = 0; k < BOARD_SIZE; k++)
+            {
+                if (board[i][j][k] != player_character)
+                {
+                    win = false;
+                    break;
+                }
+            }
+            if (win)
+            {
+                return true;
+            }
         }
-        else if (board[i][0][1] == player_character && board[i][1][1] == player_character && board[i][2][1] == player_character)
-        {
-            return true;
-        }
-        else if (board[i][0][2] == player_character && board[i][1][2] == player_character && board[i][2][2] == player_character)
-        {
-            return true;
-        }
+    }
+    return false;
+}
 
-        // Check columns
-        else if (board[0][i][0] == player_character && board[1][i][0] == player_character && board[2][i][0] == player_character)
+bool check_rows(vector<vector<vector<char>>> &board, char &player_character)
+{
+    for (int i = 0; i < BOARD_SIZE; i++)
+    {
+        for (int j = 0; j < BOARD_SIZE; j++)
         {
-            return true;
+            bool win = true;
+            for (int k = 0; k < BOARD_SIZE; k++)
+            {
+                if (board[i][k][j] != player_character)
+                {
+                    win = false;
+                    break;
+                }
+            }
+            if (win)
+            {
+                return true;
+            }
         }
-        else if (board[0][i][1] == player_character && board[1][i][1] == player_character && board[2][i][1] == player_character)
-        {
-            return true;
-        }
-        else if (board[0][i][2] == player_character && board[1][i][2] == player_character && board[2][i][2] == player_character)
-        {
-            return true;
-        }
+    }
+    return false;
+}
 
-        // Check diagonals
-        else if (board[0][0][i] == player_character && board[1][1][i] == player_character && board[2][2][i] == player_character)
+bool check_columns(vector<vector<vector<char>>> &board, char &player_character)
+{
+    for (int i = 0; i < BOARD_SIZE; i++)
+    {
+        for (int j = 0; j < BOARD_SIZE; j++)
         {
-            return true;
+            bool win = true;
+            for (int k = 0; k < BOARD_SIZE; k++)
+            {
+                if (board[k][i][j] != player_character)
+                {
+                    win = false;
+                    break;
+                }
+            }
+            if (win)
+            {
+                return true;
+            }
         }
-        else if (board[0][2][i] == player_character && board[1][1][i] == player_character && board[2][0][i] == player_character)
-        {
-            return true;
-        }
+    }
+    return false;
+}
 
-        // Check verticals
-        else if (board[0][i][0] == player_character && board[0][i][1] == player_character && board[0][i][2] == player_character)
+bool check_diagonals(vector<vector<vector<char>>> &board, char &player_character)
+{
+    for (int i = 0; i < BOARD_SIZE; i++)
+    {
+        bool win = true;
+        for (int j = 0; j < BOARD_SIZE; j++)
         {
-            return true;
+            if (board[j][j][i] != player_character)
+            {
+                win = false;
+                break;
+            }
+            if (board[j][BOARD_SIZE - 1 - j][i] != player_character)
+            {
+                win = false;
+                break;
+            }
         }
-        else if (board[1][i][0] == player_character && board[1][i][1] == player_character && board[1][i][2] == player_character)
-        {
-            return true;
-        }
-        else if (board[2][i][0] == player_character && board[2][i][1] == player_character && board[2][i][2] == player_character)
-        {
-            return true;
-        }
-
-        // Check vertical diagonals
-        else if (board[0][0][0] == player_character && board[1][1][1] == player_character && board[2][2][2] == player_character)
-        {
-            return true;
-        }
-        else if (board[2][2][0] == player_character && board[1][1][1] == player_character && board[0][0][2] == player_character)
-        {
-            return true;
-        }
-        else if (board[0][2][0] == player_character && board[1][1][1] == player_character && board[2][0][2] == player_character)
-        {
-            return true;
-        }
-        else if (board[2][0][0] == player_character && board[1][1][1] == player_character && board[0][2][2] == player_character)
+        if (win)
         {
             return true;
         }
     }
-
     return false;
+}
+
+bool check_vertical_diagonals(vector<vector<vector<char>>> &board, char &player_character)
+{
+    bool win = true;
+    for (int i = 0; i < BOARD_SIZE; i++)
+    {
+        if (board[i][i][i] != player_character)
+        {
+            win = false;
+            break;
+        }
+        if (board[BOARD_SIZE - 1 - i][BOARD_SIZE - 1 - i][BOARD_SIZE - 1 - i] != player_character)
+        {
+            win = false;
+            break;
+        }
+        if (board[i][BOARD_SIZE - 1 - i][i] != player_character)
+        {
+            win = false;
+            break;
+        }
+        if (board[BOARD_SIZE - 1 - i][i][i] != player_character)
+        {
+            win = false;
+            break;
+        }
+    }
+    if (win)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool check_win(vector<vector<vector<char>>> &board, char &player_character)
+{
+    return check_rows(board, player_character) || check_columns(board, player_character) || check_diagonals(board, player_character) || check_verticals(board, player_character) || check_vertical_diagonals(board, player_character);
 }
 
 int main()
